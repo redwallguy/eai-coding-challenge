@@ -22,6 +22,8 @@ class Contact:
             self.phone_num = phone_num
         if self.min_age <= age <= self.max_age:
             self.age = age
+        else:
+            self.age = 18
 
 
 def create_contact(form):
@@ -84,10 +86,6 @@ def get_contact(name):
     return res["hits"]["hits"][0]["_source"]
 
 
-def get_index():
-    pass
-
-
 def get_contact_id(name):
     query_string = json.dumps( \
         {"query": {
@@ -103,3 +101,7 @@ def get_contact_id(name):
     if res["hits"]["total"] == 0:
         return contact_not_found_dict
     return res["hits"]["hits"][0]["_id"]
+
+
+def get_index(size, offset, qsq):
+    return es.search(index=("contact",), size=size, from_=offset, q=qsq)
